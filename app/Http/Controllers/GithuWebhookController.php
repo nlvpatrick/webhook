@@ -89,13 +89,14 @@ class GithuWebhookController extends Controller
         return $response->body();
     }
 
-    private function getAIReview(string $diff): string
+    private function getAIReview(string $prompt): string
     {
         $apiKey = config('services.gemini.api_key');
-        $prompt = $this->buildReviewPrompt($diff);
+
+        $model = 'gemini-2.5-flash';
 
         $response = Http::post(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={$apiKey}",
+            "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}",
             [
                 'contents' => [
                     [
@@ -136,6 +137,22 @@ class GithuWebhookController extends Controller
 
     private function buildReviewPrompt(string $diff): string
     {
-        return "You are an expert code reviewer. Please review the following pull request diff and provide constructive feedback, suggestions for improvements, and highlight any potential issues:\n\n{$diff}\n\nProvide your review below:";
+        return <<<PROMPT
+You are an expert code reviewer. Review the following git diff and provide constructive feedback.
+
+Focus on:
+- Code quality and best practices
+- Potential bugs or issues
+- Security concerns
+- Performance implications
+- Maintainability and readability
+
+Format your response in markdown with clear sections.
+
+Git Diff:
+```
+{$diff}
+```
+PROMPT;
     }
 }
