@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'github' => [
+        'token' => env('GITHUB_TOKEN'),
+        'webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
 ];

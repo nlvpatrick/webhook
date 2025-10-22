@@ -24,4 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::post('webhooks/github', [App\Http\Controllers\GithuWebhookController::class, 'handle'])->name('webhooks.github');
+
 require __DIR__.'/auth.php';
